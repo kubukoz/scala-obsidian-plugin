@@ -7,9 +7,27 @@ lazy val root = project
     tpolecatOptionsMode := DevMode
   )
   .enablePlugins(ScalaJSPlugin)
-  .settings(scalaJSLinkerConfig ~= {
-    _.withModuleKind(ModuleKind.CommonJSModule)
-  })
+  .settings(
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.CommonJSModule)
+    },
+    (Compile / fastLinkJS) := {
+      val result = (Compile / fastLinkJS).value
+      IO.copyDirectory(
+        (Compile / fastLinkJS / scalaJSLinkerOutputDirectory).value,
+        (baseDirectory.value)
+      )
+      result
+    },
+    (Compile / fullLinkJS) := {
+      val result = (Compile / fullLinkJS).value
+      IO.copyDirectory(
+        (Compile / fullLinkJS / scalaJSLinkerOutputDirectory).value,
+        (baseDirectory.value)
+      )
+      result
+    }
+  )
   .enablePlugins(ScalablyTypedConverterExternalNpmPlugin)
   .settings(
     externalNpm := {
