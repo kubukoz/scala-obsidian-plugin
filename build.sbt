@@ -8,6 +8,11 @@ lazy val root = project
   )
   .enablePlugins(ScalaJSPlugin)
   .settings(
+    libraryDependencies ++= Seq(
+      "org.http4s" %%% "http4s-circe" % "0.23.30",
+      "org.http4s" %%% "http4s-dom" % "0.2.8",
+      "com.armanbilge" %%% "calico" % "0.2.3"
+    ),
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.CommonJSModule)
     },
